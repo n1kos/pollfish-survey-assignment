@@ -7,6 +7,33 @@
     <title>Document</title>
   </head>
   <body>
+    <template id="question">
+      <div class="question">
+        <div class="question__header">
+          <span class="question__header--title">Q</span>
+          <span class="question__header--index"></span>
+        </div>
+        <div class="question__body">
+          <span class="question__body--text"></span>
+        </div>
+        <div class="answer"></div>
+      </div>
+    </template>
+
+    <template id="answer">
+      <div class="answer__header">
+        <span class="answer__header--title"></span>
+        <span class="answer__header--index"></span>
+      </div>
+      <div class="answer__body">
+        <span class="answer__body--text"></span>
+        <button class="answer__body--delete">X</button>
+      </div>
+      <button class="answer__body--add">+</button>
+    </template>
+
+    <div id="app"></div>
+    <button class="question__body--add">+</button>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>
