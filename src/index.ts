@@ -1,5 +1,5 @@
-const init = () => {
-  alert("init");
-};
+import { App } from "./App";
 
-init();
+const app = new App();
+
+app.init();
