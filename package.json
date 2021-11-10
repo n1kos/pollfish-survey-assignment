@@ -1,11 +1,34 @@
 {
   "name": "pf",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
+  "description": "Survey",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "parcel --port 8080 ./src/index.html",
+    "build": "parcel build ./src/index.html",
+    "compile": "tsc",
+    "test": "test"
   },
-  "author": "",
+  "engines": {
+    "node": "14.17.5",
+    "npm": "6.14.14"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.0.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "lite-server": "^2.6.1",
+    "parcel": "^2.0.0",
+    "prettier": "2.4.1",
+    "prettier-eslint": "^13.0.0",
+    "typescript": "^4.3.5",
+    "typescript-eslint": "*"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "author": "Nikos Kossifas",
   "license": "ISC"
 }

@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ES2015", "DOM", "DOM.Iterable", "ScriptHost"],
+    "declaration": true,
+    "outDir": "./public",
+    "strict": true,
+    "noImplicitAny": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "shared/*": ["/src/shared/*"],
+      "services/*": ["/src/shared/services/*"],
+      "model/*": ["/src/shared/model/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}
