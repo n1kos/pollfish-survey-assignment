@@ -15,39 +15,33 @@ export class App {
   constructor() {}
   private rs = new ApiRequestService();
   private survey: Survey[] | undefined = [];
+  private appNode = document.getElementById("app") as HTMLElement;
 
   buildDOM = (survey: Survey[]) => {
     console.dir(survey);
-    //wesbos.com/template-strings-html
-    const markup = `
-<div class="beer">
-    <h2>${survey.pro}</h2>
-    <p class="brewery">${beer.brewery}
-</div>
-`;
-    // const appNode = document.getElementById("app") as HTMLElement;
-    // const templateQuestion = document.getElementById(
-    //   "question"
-    // ) as HTMLTemplateElement;
-    // const templateQuestionContent = templateQuestion?.content;
+    const questionNode = document.getElementById(
+      "question"
+    ) as HTMLTemplateElement;
+    const questionContent = questionNode.content;
 
-    // const templateAnswer = document.getElementById(
-    //   "answer"
-    // ) as HTMLTemplateElement;
-    // const templatAnswerContent = templateAnswer?.content;
+    const answerNode = document.getElementById("answer") as HTMLTemplateElement;
+    const answerContent = answerNode.content;
 
-    // console.log(templateQuestionContent);
-    // console.log(templatAnswerContent);
+    survey.forEach((question, index) => {
+      console.log(question);
+      // let elem = document.createElement('div');
+      // elem.append(tmpl.content.cloneNode(true));
 
-    // survey.forEach((question) => {
-    //   appNode.appendChild(templateQuestionContent);
-    //   console.group(question.prompt);
-    //   question.answers.forEach((answers) => {
-    //     const li = document.createElement("li");
-    //     appNode.appendChild(templatAnswerContent);
-    //     console.log(answers);
-    //   });
-    // });
+      this.appNode.appendChild(questionContent.cloneNode(true));
+      question.answers.forEach((answer) => {
+        const latestQuestion = this.appNode
+          .querySelectorAll(".question")
+          [index].querySelector(".answer");
+        console.log(answer);
+        console.log(latestQuestion);
+        latestQuestion?.appendChild(answerContent.cloneNode(true));
+      });
+    });
   };
 
   init = async () => {
