@@ -17,31 +17,51 @@ export class App {
   private survey: Survey[] | undefined = [];
   private appNode = document.getElementById("app") as HTMLElement;
 
+  _buildQuestions(
+    questionContent: DocumentFragment,
+    answerContent: DocumentFragment,
+    survey: Survey[]
+  ) {
+    survey.forEach((question, index) => {
+      this.appNode.appendChild(questionContent.cloneNode(true));
+      const currentNode = this.appNode.querySelectorAll(".question")[index];
+      const currentQuestionIndexNode = currentNode.querySelector(
+        ".question__header--index"
+      );
+      const currentQuestionTitleNode = currentNode.querySelector(
+        ".question__body--text"
+      );
+      //@ts-expect-error depends on template classes
+      currentQuestionIndexNode.innerHTML = `${index + 1}`;
+      //@ts-expect-error depends on template classes
+      currentQuestionTitleNode.innerHTML = `${question.prompt}`;
+
+      question.answers.forEach((answer, q_Index) => {
+        const latestQuestion = currentNode.querySelector(".answer");
+        latestQuestion?.appendChild(answerContent.cloneNode(true));
+        const currentAnswerIndexNode = latestQuestion?.querySelectorAll(
+          ".answer__header--index"
+        )[q_Index];
+        const currentAnswerTextNode = latestQuestion?.querySelectorAll(
+          ".answer__body--text"
+        )[q_Index];
+
+        //@ts-expect-error depends on template classes
+        currentAnswerIndexNode.innerHTML = `${q_Index + 1}`;
+        //@ts-expect-error depends on template classes
+        currentAnswerTextNode.innerHTML = `${answer}`;
+      });
+    });
+  }
+
   buildDOM = (survey: Survey[]) => {
-    console.dir(survey);
     const questionNode = document.getElementById(
       "question"
     ) as HTMLTemplateElement;
     const questionContent = questionNode.content;
-
     const answerNode = document.getElementById("answer") as HTMLTemplateElement;
     const answerContent = answerNode.content;
-
-    survey.forEach((question, index) => {
-      console.log(question);
-      // let elem = document.createElement('div');
-      // elem.append(tmpl.content.cloneNode(true));
-
-      this.appNode.appendChild(questionContent.cloneNode(true));
-      question.answers.forEach((answer) => {
-        const latestQuestion = this.appNode
-          .querySelectorAll(".question")
-          [index].querySelector(".answer");
-        console.log(answer);
-        console.log(latestQuestion);
-        latestQuestion?.appendChild(answerContent.cloneNode(true));
-      });
-    });
+    this._buildQuestions(questionContent, answerContent, survey);
   };
 
   init = async () => {
