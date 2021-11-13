@@ -12,12 +12,19 @@
         <div class="question__header">
           <span class="question__header--title">Q</span>
           <span class="question__header--index"></span>
-        </div>
-        <div class="question__body">
-          <span class="question__body--text"></span>
+          <span class="question__body--text" contenteditable="true"
+            >Enter your question</span
+          >
         </div>
         <div class="answer"></div>
-        <button class="answer__body--add">+</button>
+        <input
+          type="text"
+          placeholder="Type next answer"
+          class="answer__body--add"
+          name=""
+          id=""
+        />
+        <!-- <button class="answer__body--add">+</button> -->
       </div>
     </template>
 
@@ -34,7 +41,7 @@
     </template>
 
     <div id="app"></div>
-    <button class="question__body--add">+</button>
+    <button class="question__body--add">Add new question</button>
     <script type="module" src="./index.ts"></script>
   </body>
 </html>
