@@ -8,7 +8,7 @@
   </head>
   <body>
     <template id="question">
-      <div class="question">
+      <div class="question" data-question-index>
         <div class="question__header">
           <span class="question__header--title">Q</span>
           <span class="question__header--index"></span>
@@ -16,7 +16,7 @@
             >Enter your question</span
           >
         </div>
-        <div class="answer"></div>
+        <div class="answer" data-answer-index></div>
         <input
           type="text"
           placeholder="Type next answer"

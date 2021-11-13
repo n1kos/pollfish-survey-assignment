@@ -1,19 +1,11 @@
-import { ApiRequestService } from "./request-service";
+import { ApiRequestService } from "./shared/service/request-service";
 import { v4 as uuidv4 } from "uuid";
-export interface SurveyResponse {
-  success: boolean;
-  data: Survey[];
-}
-
-export interface Survey {
-  prompt: string;
-  answers: [string?];
-  id: string;
-}
-
+import { Survey } from "./shared/model/common";
+import { Utils } from "./shared/service/ustils.service";
 export class App {
   constructor() {}
   private rs = new ApiRequestService();
+  private us = new Utils();
   private survey: Survey[] | undefined = [];
   private appNode = document.getElementById("app") as HTMLElement;
 
@@ -59,6 +51,37 @@ export class App {
     addQuestionNode?.addEventListener("click", addStuff);
   };
 
+  _typeAnswer = () => {
+    const addStuff = this.us.debounce((evt: KeyboardEvent) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+      const fieldTyped = evt.target as HTMLElement;
+      let questionNode: HTMLElement | null | undefined = null;
+      let answerNode: HTMLElement;
+
+      switch (fieldTyped.nodeName) {
+        case "INPUT":
+          questionNode = fieldTyped.parentElement;
+          break;
+        case "SPAN":
+          questionNode = fieldTyped.parentElement?.parentElement;
+          break;
+        default:
+          break;
+      }
+      //@ts-expect-error
+      const questionIndex = parseInt(questionNode?.dataset["questionIndex"]);
+      const keyPressed = evt.key;
+
+      if (keyPressed == "Enter" || keyPressed == "Tab") {
+        //@ts-expect-error
+        this.survey[questionIndex].prompt = fieldTyped.innerHTML;
+        this.rs.saveSurvey(this.survey);
+      }
+    }, 3000);
+    this.appNode.addEventListener("keydown", addStuff);
+  };
+
   _addNewQuestion = (theNode: HTMLElement) => {
     return {
       theNode,
@@ -88,7 +111,7 @@ export class App {
       currentQuestionIndexNode.innerHTML = `${index + 1}`;
       //@ts-expect-error depends on template classes
       currentQuestionTitleNode.innerHTML = `${question.prompt}`;
-
+      currentNode.setAttribute("data-question-index", index.toString());
       question.answers.forEach((answer, q_Index) => {
         const latestQuestion = currentNode.querySelector(".answer");
         latestQuestion?.appendChild(answerContent.cloneNode(true));
@@ -103,6 +126,11 @@ export class App {
         currentAnswerIndexNode.innerHTML = `${this._addZeroes(q_Index + 1)}`;
         //@ts-expect-error depends on template classes
         currentAnswerTextNode.innerHTML = `${answer}`;
+        //@ts-expect-error depends on template classes
+        currentAnswerIndexNode?.parentNode?.parentNode.setAttribute(
+          "data-answer-index",
+          q_Index.toString()
+        );
       });
     });
   };
@@ -137,6 +165,7 @@ export class App {
       this.buildDOM(questionContent, answerContent, this.survey);
       this._checkNewQuestionStatus(addQuestionNode, this.survey);
       this._addNewQuestionClick(addQuestionNode, questionContent);
+      this._typeAnswer();
     }
   };
 }
