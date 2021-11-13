@@ -55,13 +55,15 @@ export class App {
     const addStuff = this.us.debounce((evt: KeyboardEvent) => {
       evt.preventDefault();
       evt.stopPropagation();
-      const fieldTyped = evt.target as HTMLElement;
+      let addingQuestion: boolean = true;
+      const fieldTyped = evt.target as HTMLInputElement | HTMLElement;
       let questionNode: HTMLElement | null | undefined = null;
-      let answerNode: HTMLElement;
+      let answerNode: HTMLElement | null | undefined = null;
 
       switch (fieldTyped.nodeName) {
         case "INPUT":
           questionNode = fieldTyped.parentElement;
+          addingQuestion = false;
           break;
         case "SPAN":
           questionNode = fieldTyped.parentElement?.parentElement;
@@ -74,8 +76,42 @@ export class App {
       const keyPressed = evt.key;
 
       if (keyPressed == "Enter" || keyPressed == "Tab") {
-        //@ts-expect-error
-        this.survey[questionIndex].prompt = fieldTyped.innerHTML;
+        if (addingQuestion) {
+          //@ts-expect-error
+          this.survey[questionIndex].prompt = fieldTyped.innerHTML;
+        } else {
+          //@ts-expect-error
+          this.survey[questionIndex].answers.push(fieldTyped.value);
+          console.log("adding answer");
+          console.log(this.survey);
+          //@ts-expect-error
+          questionNode.querySelector(".answer").appendChild(
+            //@ts-expect-error
+            document.getElementById("answer").content.cloneNode(true)
+          );
+          //@ts-expect-error
+          answerNode = questionNode.querySelector(".answer");
+          //@ts-expect-error
+          const newAnswerNode = answerNode.lastElementChild;
+          //@ts-expect-error
+          newAnswerNode.setAttribute(
+            "data-answer-index",
+            //@ts-expect-error
+            this.survey[questionIndex].answers.length.toString()
+          );
+          //@ts-expect-error
+          newAnswerNode.querySelector(".answer__header--index").innerHTML =
+            this._addZeroes(
+              //@ts-expect-error
+              this.survey[questionIndex].answers.length
+            );
+          //@ts-expect-error
+          newAnswerNode.querySelector(".answer__body--text").innerHTML =
+            //@ts-expect-error
+            fieldTyped.value;
+          //@ts-expect-error
+          fieldTyped.value = "";
+        }
         this.rs.saveSurvey(this.survey);
       }
     }, 3000);
