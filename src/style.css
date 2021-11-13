@@ -1,0 +1,19 @@
+.question:first-child button.question__body--up {
+  color: blanchedalmond;
+  pointer-events: none;
+}
+
+.question:last-child button.question__body--down {
+  color: blanchedalmond;
+  pointer-events: none;
+}
+
+.answer > div:first-child .answer__body--up {
+  color: blanchedalmond;
+  pointer-events: none;
+}
+
+.answer > div:last-child .answer__body--down {
+  color: blanchedalmond;
+  pointer-events: none;
+}

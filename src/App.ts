@@ -71,14 +71,122 @@ export class App {
       });
   };
 
+  __deleteContent = (targetElement: HTMLElement) => {
+    let isDeletingQuestion: boolean = true;
+    let questionNode: HTMLElement | null | undefined = null;
+    let answerNode: HTMLElement | null | undefined = null;
+    let questionIndex: number | null | undefined = null;
+    let answerIndex: number | null | undefined = null;
+
+    switch (targetElement.dataset.type) {
+      case "question":
+        questionNode = targetElement.parentElement?.parentElement;
+        break;
+      case "answer":
+        questionNode =
+          targetElement.parentElement?.parentElement?.parentElement
+            ?.parentElement;
+        answerNode = targetElement.parentElement?.parentElement;
+        isDeletingQuestion = false;
+        break;
+      default:
+        break;
+    }
+    //@ts-expect-error
+    questionIndex = parseInt(questionNode?.dataset.questionIndex);
+    if (isDeletingQuestion) {
+      this.survey?.splice(questionIndex, 1);
+      this.rs.saveSurvey(this.survey);
+      questionNode?.remove();
+      this.__updateQuestionIndices();
+    } else {
+      //@ts-expect-error
+      answerIndex = parseInt(answerNode?.dataset.answerIndex);
+      //@ts-expect-error
+      this.survey[questionIndex].answers.splice(answerIndex, 1);
+      this.rs.saveQuestion(
+        //@ts-expect-error
+        this.survey[questionIndex],
+        //@ts-expect-error
+        this.survey[questionIndex].id
+      );
+      const answerNodeParent = answerNode?.parentElement as HTMLElement;
+      answerNode?.remove();
+      this.__updateAnswerIndices(answerNodeParent);
+    }
+  };
+
+  __sortContent = (targetElement: HTMLElement) => {
+    let isSortingQuestion: boolean = true;
+    let questionNode: HTMLElement | null | undefined = null;
+    let answerNode: HTMLElement | null | undefined = null;
+    let swapWith: HTMLElement | undefined | null = null;
+    let questionIndex: number = -1;
+    let answerIndex: number = -1;
+
+    switch (targetElement.dataset.type) {
+      case "question":
+        questionNode = targetElement.parentElement?.parentElement;
+        break;
+      case "answer":
+        questionNode =
+          targetElement.parentElement?.parentElement?.parentElement
+            ?.parentElement;
+        answerNode = targetElement.parentElement?.parentElement;
+        isSortingQuestion = false;
+        break;
+      default:
+        break;
+    }
+    //@ts-expect-error
+    questionIndex = parseInt(questionNode.dataset.questionIndex);
+    if (isSortingQuestion) {
+      if (targetElement.dataset.direction === "down") {
+        //@ts-expect-error
+        swapWith = questionNode?.nextElementSibling;
+        //@ts-expect-error
+        questionNode.parentNode.insertBefore(swapWith, questionNode);
+        this.us.swapArrayElements(
+          this.survey,
+          questionIndex,
+          questionIndex + 1
+        );
+      } else {
+        //@ts-expect-error
+        swapWith = questionNode?.previousElementSibling;
+        //@ts-expect-error
+        questionNode.parentNode.insertBefore(questionNode, swapWith);
+        this.us.swapArrayElements(
+          this.survey,
+          questionIndex,
+          questionIndex - 1
+        );
+      }
+      this.__updateQuestionIndices();
+      this.rs.saveSurvey(this.survey);
+    } else {
+      //sorting answers
+      answerIndex = parseInt(answerNode?.dataset.answerIndex);
+      if (targetElement.dataset.direction === "down") {
+        //@ts-expect-error
+        swapWith = answerNode?.nextElementSibling;
+        //@ts-expect-error
+        answerNode.parentNode.insertBefore(swapWith, answerNode);
+      } else {
+        //@ts-expect-error
+        swapWith = answerNode?.previousElementSibling;
+        //@ts-expect-error
+        answerNode.parentNode.insertBefore(answerNode, swapWith);
+      }
+      this.__updateAnswerIndices(answerIndex);
+      //
+    }
+    console.log(answerNode);
+  };
+
   _buttonPressed = () => {
     const doStuff = this.us.debounce((evt: Event) => {
-      let isDeletingQuestion: boolean = true;
       const targetElement = evt.target as HTMLElement;
-      let questionNode: HTMLElement | null | undefined = null;
-      let answerNode: HTMLElement | null | undefined = null;
-      let questionIndex: number | null | undefined = null;
-      let answerIndex: number | null | undefined = null;
 
       if (
         targetElement.nodeName !== "BUTTON" ||
@@ -88,44 +196,10 @@ export class App {
         evt.preventDefault();
         evt.cancelBubble = true;
       } else {
-        console.log("a button was clicked");
         if (targetElement.dataset.action === "delete") {
-          switch (targetElement.dataset.type) {
-            case "question":
-              questionNode = targetElement.parentElement?.parentElement;
-              break;
-            case "answer":
-              questionNode =
-                targetElement.parentElement?.parentElement?.parentElement
-                  ?.parentElement;
-              answerNode = targetElement.parentElement?.parentElement;
-              isDeletingQuestion = false;
-              break;
-            default:
-              break;
-          }
-          //@ts-expect-error
-          questionIndex = parseInt(questionNode?.dataset.questionIndex);
-          if (isDeletingQuestion) {
-            this.survey?.splice(questionIndex, 1);
-            this.rs.saveSurvey(this.survey);
-            questionNode?.remove();
-            this.__updateQuestionIndices();
-          } else {
-            //@ts-expect-error
-            answerIndex = parseInt(answerNode?.dataset.answerIndex);
-            //@ts-expect-error
-            this.survey[questionIndex].answers.splice(answerIndex, 1);
-            this.rs.saveQuestion(
-              //@ts-expect-error
-              this.survey[questionIndex],
-              //@ts-expect-error
-              this.survey[questionIndex].id
-            );
-            const answerNodeParent = answerNode?.parentElement as HTMLElement;
-            answerNode?.remove();
-            this.__updateAnswerIndices(answerNodeParent);
-          }
+          this.__deleteContent(targetElement);
+        } else if (targetElement.dataset.action === "sort") {
+          this.__sortContent(targetElement);
         }
       }
     }, 30);
