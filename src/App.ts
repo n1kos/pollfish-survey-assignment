@@ -51,6 +51,26 @@ export class App {
     addQuestionNode?.addEventListener("click", addStuff);
   };
 
+  __updateQuestionIndices = () => {
+    this.appNode.querySelectorAll(".question").forEach((question, index) => {
+      question.setAttribute("data-question-index", index.toString());
+      //@ts-expect-error
+      question.querySelector(".question__header--index").innerHTML = index + 1;
+    });
+  };
+
+  __updateAnswerIndices = (answerNodeParent: HTMLElement) => {
+    answerNodeParent
+      .querySelectorAll("[data-answer-index")
+      .forEach((answer, index) => {
+        answer.setAttribute("data-answer-index", index.toString());
+        //@ts-expect-error
+        answer.querySelector(
+          ".answer__header--index"
+        ).innerHTML = `${this._addZeroes(index + 1)}`;
+      });
+  };
+
   _buttonPressed = () => {
     const doStuff = this.us.debounce((evt: Event) => {
       let isDeletingQuestion: boolean = true;
@@ -90,14 +110,7 @@ export class App {
             this.survey?.splice(questionIndex, 1);
             this.rs.saveSurvey(this.survey);
             questionNode?.remove();
-            this.appNode
-              .querySelectorAll(".question")
-              .forEach((question, index) => {
-                question.setAttribute("data-question-index", index.toString());
-                //@ts-expect-error
-                question.querySelector(".question__header--index").innerHTML =
-                  index + 1;
-              });
+            this.__updateQuestionIndices();
           } else {
             //@ts-expect-error
             answerIndex = parseInt(answerNode?.dataset.answerIndex);
@@ -111,15 +124,7 @@ export class App {
             );
             const answerNodeParent = answerNode?.parentElement as HTMLElement;
             answerNode?.remove();
-            answerNodeParent
-              .querySelectorAll("[data-answer-index")
-              .forEach((answer, index) => {
-                answer.setAttribute("data-answer-index", index.toString());
-                //@ts-expect-error
-                answer.querySelector(
-                  ".answer__header--index"
-                ).innerHTML = `${this._addZeroes(index + 1)}`;
-              });
+            this.__updateAnswerIndices(answerNodeParent);
           }
         }
       }
