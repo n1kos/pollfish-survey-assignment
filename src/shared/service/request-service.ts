@@ -1,4 +1,4 @@
-import { Survey, SurveyResponse } from "./App";
+import { Survey, SurveyResponse } from "../model/common";
 
 export class ApiRequestService {
   public async getSurvey(): Promise<SurveyResponse | undefined> {
@@ -23,8 +23,6 @@ export class ApiRequestService {
       body: JSON.stringify(survey),
     })
       .then((data) => {
-        console.log(data);
-
         response = data.ok;
       })
       .catch((error) => {

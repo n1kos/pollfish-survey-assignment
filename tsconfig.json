@@ -18,7 +18,7 @@
     "paths": {
       "@/*": ["src/*"],
       "shared/*": ["/src/shared/*"],
-      "services/*": ["/src/shared/services/*"],
+      "service/*": ["/src/shared/service/*"],
       "model/*": ["/src/shared/model/*"]
     }
   },
