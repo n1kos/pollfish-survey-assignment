@@ -51,6 +51,64 @@ export class App {
     addQuestionNode?.addEventListener("click", addStuff);
   };
 
+  _buttonPressed = () => {
+    const doStuff = this.us.debounce((evt: Event) => {
+      let isDeletingQuestion: boolean = true;
+      const targetElement = evt.target as HTMLElement;
+      let questionNode: HTMLElement | null | undefined = null;
+      let answerNode: HTMLElement | null | undefined = null;
+      let questionIndex: number | null | undefined = null;
+      let answerIndex: number | null | undefined = null;
+
+      if (
+        targetElement.nodeName !== "BUTTON" ||
+        targetElement.dataset.action === "noop"
+      ) {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.cancelBubble = true;
+      } else {
+        console.log("a button was clicked");
+        if (targetElement.dataset.action === "delete") {
+          switch (targetElement.dataset.type) {
+            case "question":
+              questionNode = targetElement.parentElement?.parentElement;
+              break;
+            case "answer":
+              questionNode =
+                targetElement.parentElement?.parentElement?.parentElement
+                  ?.parentElement;
+              answerNode = targetElement.parentElement?.parentElement;
+              isDeletingQuestion = false;
+              break;
+            default:
+              break;
+          }
+          //@ts-expect-error
+          questionIndex = parseInt(questionNode?.dataset.questionIndex);
+          if (isDeletingQuestion) {
+            this.survey?.splice(questionIndex, 1);
+            this.rs.saveSurvey(this.survey);
+            questionNode?.remove();
+          } else {
+            //@ts-expect-error
+            answerIndex = parseInt(answerNode?.dataset.answerIndex);
+            //@ts-expect-error
+            this.survey[questionIndex].answers.splice(answerIndex, 1);
+            this.rs.saveQuestion(
+              //@ts-expect-error
+              this.survey[questionIndex],
+              //@ts-expect-error
+              this.survey[questionIndex].id
+            );
+            answerNode?.remove();
+          }
+        }
+      }
+    }, 30);
+    document.addEventListener("click", doStuff);
+  };
+
   _typeAnswer = () => {
     const addStuff = this.us.debounce((evt: KeyboardEvent) => {
       evt.preventDefault();
@@ -123,7 +181,7 @@ export class App {
           );
         }
       }
-    }, 3000);
+    }, 1500);
     this.appNode.addEventListener("keydown", addStuff);
   };
 
@@ -211,6 +269,7 @@ export class App {
       this._checkNewQuestionStatus(addQuestionNode, this.survey);
       this._addNewQuestionClick(addQuestionNode, questionContent);
       this._typeAnswer();
+      this._buttonPressed();
     }
   };
 }
