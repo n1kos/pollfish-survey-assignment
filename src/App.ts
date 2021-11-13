@@ -18,8 +18,8 @@ export class App {
   private appNode = document.getElementById("app") as HTMLElement;
 
   _checkNewQuestionStatus(
-    survey: Survey[] | undefined,
-    addQuestionNode: HTMLButtonElement
+    addQuestionNode: HTMLButtonElement,
+    survey: Survey[] | undefined
   ) {
     if (survey?.length == 10) {
       addQuestionNode.disabled = true;
@@ -28,17 +28,35 @@ export class App {
     }
   }
 
-  _addNewQuestionClick = (questionContent: DocumentFragment): void => {
-    const addQuestionNode = document.querySelector(
-      ".question__body--add"
-    ) as HTMLButtonElement;
+  _addNewQuestionClick = (
+    addQuestionNode: HTMLButtonElement,
+    questionContent: DocumentFragment
+  ) => {
+    const addStuff = async () => {
+      this.survey?.push({
+        prompt: "Enter your question",
+        answers: [],
+        id: uuidv4(),
+      });
+      const requestResult: boolean = await this.rs.saveSurvey(this.survey);
+      console.log(requestResult);
 
-    addQuestionNode?.addEventListener("click", () => {
-      this.appNode.appendChild(questionContent.cloneNode(true));
-      this.survey?.push({ prompt: "Type", answers: [], id: uuidv4() });
-      this._checkNewQuestionStatus(this.survey, addQuestionNode);
+      if (!requestResult) {
+        alert("Could not save question");
+        this.survey?.pop();
+      } else {
+        this.appNode.appendChild(questionContent.cloneNode(true));
+        const allQuestions = this.appNode.querySelectorAll(".question");
+        //@ts-expect-error depends on template classes
+        allQuestions[allQuestions.length - 1].querySelector(
+          ".question__header--index"
+        ).innerHTML = this.survey?.length.toString();
+        this._checkNewQuestionStatus(addQuestionNode, this.survey);
+      }
       console.log(this.survey);
-    });
+    };
+
+    addQuestionNode?.addEventListener("click", addStuff);
   };
 
   _addNewQuestion = (theNode: HTMLElement) => {
@@ -112,8 +130,13 @@ export class App {
       ) as HTMLTemplateElement;
       const answerContent = answerNode.content;
 
+      const addQuestionNode = document.querySelector(
+        ".question__body--add"
+      ) as HTMLButtonElement;
+
       this.buildDOM(questionContent, answerContent, this.survey);
-      this._addNewQuestionClick(questionContent);
+      this._checkNewQuestionStatus(addQuestionNode, this.survey);
+      this._addNewQuestionClick(addQuestionNode, questionContent);
     }
   };
 }
