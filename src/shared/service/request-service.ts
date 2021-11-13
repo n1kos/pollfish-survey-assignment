@@ -31,4 +31,24 @@ export class ApiRequestService {
       });
     return response;
   }
+
+  public async saveQuestion(survey: Survey | undefined, question_id: string) {
+    const configUrl: string = `http://localhost:5000/api/questions/${question_id}`;
+    let response: boolean = true;
+    fetch(configUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(survey),
+    })
+      .then((data) => {
+        response = data.ok;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        throw new Error();
+      });
+    return response;
+  }
 }

@@ -112,7 +112,16 @@ export class App {
           //@ts-expect-error
           fieldTyped.value = "";
         }
-        this.rs.saveSurvey(this.survey);
+        if (addingQuestion) {
+          this.rs.saveSurvey(this.survey);
+        } else {
+          this.rs.saveQuestion(
+            //@ts-expect-error
+            this.survey[questionIndex],
+            //@ts-expect-error
+            this.survey[questionIndex].id
+          );
+        }
       }
     }, 3000);
     this.appNode.addEventListener("keydown", addStuff);
