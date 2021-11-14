@@ -327,7 +327,7 @@ export class App {
             this.survey[questionIndex].id
           );
         }
-        this.isDirty = true;
+        this.isDirty = false;
       }
     }, 150);
     this.appNode.addEventListener("keydown", addStuff);
