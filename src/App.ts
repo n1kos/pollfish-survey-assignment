@@ -15,10 +15,13 @@ export class App {
     addQuestionNode: HTMLButtonElement,
     survey: Survey[] | undefined
   ) {
+    const alertBox = document.querySelector(".alert");
     if (survey?.length == 10) {
       addQuestionNode.disabled = true;
+      alertBox?.classList.remove("isHidden");
     } else {
       addQuestionNode.disabled = false;
+      alertBox?.classList.add("isHidden");
     }
   }
 
@@ -52,6 +55,7 @@ export class App {
         ).innerHTML = this.survey?.length.toString();
         this._checkNewQuestionStatus(addQuestionNode, this.survey);
       }
+      window.scrollTo(0, document.body.scrollHeight);
     };
 
     addQuestionNode?.addEventListener("click", addStuff);
