@@ -1,3 +1,71 @@
+button {
+  width: 16px;
+  height: 16px;
+  width: 19.37px;
+  height: 19.37px;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+div[data-answer-index] {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  /* width: 972px; */
+}
+
+.question {
+  width: 991px;
+  border: 1px solid rgb(231, 235, 239);
+}
+
+.question__header {
+  width: 991px;
+  height: 32px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+  border-radius: 1px;
+  border: 1px solid rgb(231, 235, 239);
+}
+
+.question__header--title,
+.question__header--index {
+  color: rgb(14, 104, 249);
+  font-size: 14px;
+  font-family: "Roboto-Bold", sans-serif;
+  font-weight: bold;
+  display: inline-block;
+  width: 9px;
+}
+
+.question__body--add {
+  background-color: rgb(14, 104, 249);
+  border: 1px solid rgb(249, 250, 252);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  box-shadow: 0px 2px 6px 0px rgba(14, 104, 249, 0.3);
+  border-radius: 500px;
+  height: 32px;
+  width: 144px;
+}
+
+.question__body--text {
+  color: rgb(50, 57, 69);
+  font-family: "Roboto-Regular", sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  display: inline-block;
+  width: 865px;
+}
+
 .question:first-child button.question__body--up {
   color: blanchedalmond;
   pointer-events: none;
@@ -6,6 +74,36 @@
 .question:last-child button.question__body--down {
   color: blanchedalmond;
   pointer-events: none;
+}
+
+.answer__header {
+  display: flex;
+  height: 32px;
+  align-items: center;
+}
+
+.answer__header--index {
+  color: rgb(143, 152, 169);
+  font-size: 14px;
+  font-family: "Roboto-Bold", sans-serif;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.answer__body--text {
+  color: rgb(50, 57, 69);
+  font-size: 14px;
+  font-family: "Roboto-Regular", sans-serif;
+  font-weight: normal;
+  width: 866px;
+  display: inline-block;
+}
+
+.answer__body--add,
+.answer > div,
+.answer div[data-answer-index] {
+  width: 959px;
+  height: 32px;
 }
 
 .answer > div:first-child .answer__body--up {
