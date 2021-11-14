@@ -174,14 +174,32 @@ export class App {
         swapWith = answerNode?.nextElementSibling;
         //@ts-expect-error
         answerNode.parentNode.insertBefore(swapWith, answerNode);
+        this.us.swapArrayElements(
+          //@ts-expect-error
+          this.survey[questionIndex].answers,
+          answerIndex,
+          answerIndex + 1
+        );
       } else {
         //@ts-expect-error
         swapWith = answerNode?.previousElementSibling;
         //@ts-expect-error
         answerNode.parentNode.insertBefore(answerNode, swapWith);
+        this.us.swapArrayElements(
+          //@ts-expect-error
+          this.survey[questionIndex].answers,
+          answerIndex,
+          answerIndex - 1
+        );
       }
       //@ts-expect-error
-      this.__updateAnswerIndices(answerIndex);
+      this.__updateAnswerIndices(answerNode?.parentElement);
+      this.rs.saveQuestion(
+        //@ts-expect-error
+        this.survey[questionIndex],
+        //@ts-expect-error
+        this.survey[questionIndex].id
+      );
       //
     }
     console.log(answerNode);
