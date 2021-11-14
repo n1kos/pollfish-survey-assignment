@@ -270,6 +270,14 @@ export class App {
 
       if (keyPressed == "Enter" || keyPressed == "Tab") {
         if (addingQuestion) {
+          if (purifiedInput === "") {
+            if (confirm("Do you want to delete the question?")) {
+              //@ts-expect-error
+              questionNode?.querySelector(".question__body--delete").click();
+            } else {
+              purifiedInput = "Type your question";
+            }
+          }
           fieldTyped.innerHTML = purifiedInput;
           //@ts-expect-error
           this.survey[questionIndex].prompt = purifiedInput;
