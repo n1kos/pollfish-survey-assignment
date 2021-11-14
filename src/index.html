@@ -10,6 +10,13 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+      integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
@@ -23,38 +30,29 @@
             >Enter your question</span
           >
           <button
-            data-action="delete"
-            data-type="question"
-            class="question__body--delete"
-          >
-            X
-          </button>
-          <button
             data-action="sort"
             data-direction="up"
             data-type="question"
-            class="question__body--up"
-          >
-            ^
-          </button>
+            class="question__body--up fas fa-chevron-up"
+          ></button>
           <button
             data-action="sort"
             data-direction="down"
             data-type="question"
-            class="question__body--down"
-          >
-            V
-          </button>
+            class="question__body--down fas fa-chevron-down"
+          ></button>
+          <button
+            data-action="delete"
+            data-type="question"
+            class="question__body--delete fas fa-trash"
+          ></button>
         </div>
         <div class="answer"></div>
         <input
           type="text"
           placeholder="Type next answer"
           class="answer__body--add"
-          name=""
-          id=""
         />
-        <!-- <button class="answer__body--add">+</button> -->
       </div>
     </template>
 
@@ -66,28 +64,22 @@
         <div class="answer__body">
           <span class="answer__body--text"></span>
           <button
-            data-action="delete"
-            data-type="answer"
-            class="answer__body--delete"
-          >
-            X
-          </button>
-          <button
             data-action="sort"
             data-direction="up"
             data-type="answer"
-            class="answer__body--up"
-          >
-            ^
-          </button>
+            class="answer__body--up fas fa-chevron-up"
+          ></button>
           <button
             data-action="sort"
             data-direction="down"
             data-type="answer"
-            class="answer__body--down"
-          >
-            V
-          </button>
+            class="answer__body--down fas fa-chevron-down"
+          ></button>
+          <button
+            data-action="delete"
+            data-type="answer"
+            class="answer__body--delete fas fa-trash"
+          ></button>
         </div>
       </div>
     </template>
