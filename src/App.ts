@@ -211,13 +211,11 @@ export class App {
       );
       //
     }
-    console.log(answerNode);
   };
 
   _buttonPressed = () => {
     const doStuff = this.us.debounce((evt: Event) => {
       const targetElement = evt.target as HTMLElement;
-
       if (
         targetElement.nodeName !== "BUTTON" ||
         targetElement.dataset.action === "noop"
@@ -266,9 +264,9 @@ export class App {
           this.survey[questionIndex].prompt = fieldTyped.innerHTML;
         } else {
           //@ts-expect-error
-          this.survey[questionIndex].answers.push(fieldTyped.value);
-          console.log("adding answer");
-          console.log(this.survey);
+          if (fieldTyped.value.match(/\S+/g) === null) return;
+          //@ts-expect-error
+          this.survey[questionIndex].answers.push(fieldTyped.value.trim());
           //@ts-expect-error
           questionNode.querySelector(".answer").appendChild(
             //@ts-expect-error
@@ -293,7 +291,7 @@ export class App {
           //@ts-expect-error
           newAnswerNode.querySelector(".answer__body--text").innerHTML =
             //@ts-expect-error
-            fieldTyped.value;
+            fieldTyped.value.trim();
           //@ts-expect-error
           fieldTyped.value = "";
         }
@@ -371,8 +369,6 @@ export class App {
     const response = await this.rs.getSurvey();
     if (response !== undefined) {
       this.survey = await response.data;
-      console.log(this.survey);
-
       const questionNode = document.getElementById(
         "question"
       ) as HTMLTemplateElement;
