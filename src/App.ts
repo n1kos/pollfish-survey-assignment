@@ -9,6 +9,7 @@ export class App {
   private us = new Utils();
   private survey: Survey[] | undefined = [];
   private appNode = document.getElementById("app") as HTMLElement;
+  private isDirty: boolean = false;
 
   _checkNewQuestionStatus(
     addQuestionNode: HTMLButtonElement,
@@ -244,7 +245,7 @@ export class App {
       let purifiedInput: string = "";
       let questionNode: HTMLElement | null | undefined = null;
       let answerNode: HTMLElement | null | undefined = null;
-
+      this.isDirty = true;
       switch (fieldTyped.nodeName) {
         case "INPUT":
           questionNode = fieldTyped.parentElement;
@@ -314,6 +315,7 @@ export class App {
             this.survey[questionIndex].id
           );
         }
+        this.isDirty = true;
       }
     }, 150);
     this.appNode.addEventListener("keydown", addStuff);
