@@ -1,5 +1,6 @@
 import { ApiRequestService } from "./shared/service/request-service";
 import { v4 as uuidv4 } from "uuid";
+import DOMPurify from "dompurify";
 import { Survey } from "./shared/model/common";
 import { Utils } from "./shared/service/ustils.service";
 export class App {
@@ -240,6 +241,7 @@ export class App {
       evt.stopPropagation();
       let addingQuestion: boolean = true;
       const fieldTyped = evt.target as HTMLInputElement | HTMLElement;
+      let purifiedInput: string = "";
       let questionNode: HTMLElement | null | undefined = null;
       let answerNode: HTMLElement | null | undefined = null;
 
@@ -247,9 +249,16 @@ export class App {
         case "INPUT":
           questionNode = fieldTyped.parentElement;
           addingQuestion = false;
+          //@ts-expect-error
+          purifiedInput = DOMPurify.sanitize(fieldTyped.value, {
+            ALLOWED_TAGS: ["b"],
+          }).trim();
           break;
         case "SPAN":
           questionNode = fieldTyped.parentElement?.parentElement;
+          purifiedInput = DOMPurify.sanitize(fieldTyped.innerHTML, {
+            ALLOWED_TAGS: ["b"],
+          }).trim();
           break;
         default:
           break;
@@ -260,13 +269,14 @@ export class App {
 
       if (keyPressed == "Enter" || keyPressed == "Tab") {
         if (addingQuestion) {
+          fieldTyped.innerHTML = purifiedInput;
           //@ts-expect-error
-          this.survey[questionIndex].prompt = fieldTyped.innerHTML;
+          this.survey[questionIndex].prompt = purifiedInput;
         } else {
           //@ts-expect-error
           if (fieldTyped.value.match(/\S+/g) === null) return;
-          //@ts-expect-error
-          this.survey[questionIndex].answers.push(fieldTyped.value.trim());
+          //@ts-expect-error this
+          this.survey[questionIndex].answers.push(purifiedInput);
           //@ts-expect-error
           questionNode.querySelector(".answer").appendChild(
             //@ts-expect-error
@@ -290,8 +300,7 @@ export class App {
             );
           //@ts-expect-error
           newAnswerNode.querySelector(".answer__body--text").innerHTML =
-            //@ts-expect-error
-            fieldTyped.value.trim();
+            purifiedInput;
           //@ts-expect-error
           fieldTyped.value = "";
         }
@@ -306,7 +315,7 @@ export class App {
           );
         }
       }
-    }, 1500);
+    }, 150);
     this.appNode.addEventListener("keydown", addStuff);
   };
 
