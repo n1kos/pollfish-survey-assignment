@@ -31,21 +31,25 @@ export class App {
         id: uuidv4(),
       });
       const requestResult: boolean = await this.rs.saveSurvey(this.survey);
-      console.log(requestResult);
-
       if (!requestResult) {
         alert("Could not save question");
         this.survey?.pop();
       } else {
         this.appNode.appendChild(questionContent.cloneNode(true));
         const allQuestions = this.appNode.querySelectorAll(".question");
+        const latestQuestion = allQuestions[
+          allQuestions.length - 1
+        ] as HTMLElement;
+        latestQuestion.setAttribute(
+          "data-question-index",
+          (allQuestions.length - 1).toString()
+        );
         //@ts-expect-error depends on template classes
         allQuestions[allQuestions.length - 1].querySelector(
           ".question__header--index"
         ).innerHTML = this.survey?.length.toString();
         this._checkNewQuestionStatus(addQuestionNode, this.survey);
       }
-      console.log(this.survey);
     };
 
     addQuestionNode?.addEventListener("click", addStuff);
@@ -115,6 +119,11 @@ export class App {
       answerNode?.remove();
       this.__updateAnswerIndices(answerNodeParent);
     }
+    this._checkNewQuestionStatus(
+      //@ts-expect-error
+      document.querySelector(".question__body--add"),
+      this.survey
+    );
   };
 
   __sortContent = (targetElement: HTMLElement) => {
@@ -301,12 +310,6 @@ export class App {
       }
     }, 1500);
     this.appNode.addEventListener("keydown", addStuff);
-  };
-
-  _addNewQuestion = (theNode: HTMLElement) => {
-    return {
-      theNode,
-    };
   };
 
   _addZeroes = (input: string) => {
