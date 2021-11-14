@@ -330,7 +330,7 @@ export class App {
   };
 
   _addZeroes = (input: string) => {
-    input.length == 1 ? true : (input = `0${input}`);
+    parseInt(input) < 10 ? (input = `0${input}`) : true;
     return input;
   };
 
