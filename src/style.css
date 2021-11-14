@@ -2,9 +2,14 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  background: rgb(249, 250, 252);
+}
+
 #app,
 .button_wrapper {
-  width: 900px;
+  align-items: center;
+  width: 56%;
   margin: auto;
   display: flex;
   flex-wrap: wrap;
@@ -70,10 +75,10 @@ i.fas {
 }
 
 .question {
-  width: 991px;
   padding: 16px;
   border-radius: 5px;
   margin-bottom: 16px;
+  background: #ffffff;
   border: 1px solid rgb(231, 235, 239);
 }
 
