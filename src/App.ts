@@ -67,6 +67,7 @@ export class App {
         //@ts-expect-error
         answer.querySelector(
           ".answer__header--index"
+          //@ts-expect-error
         ).innerHTML = `${this._addZeroes(index + 1)}`;
       });
   };
@@ -166,6 +167,7 @@ export class App {
       this.rs.saveSurvey(this.survey);
     } else {
       //sorting answers
+      //@ts-expect-error
       answerIndex = parseInt(answerNode?.dataset.answerIndex);
       if (targetElement.dataset.direction === "down") {
         //@ts-expect-error
@@ -178,6 +180,7 @@ export class App {
         //@ts-expect-error
         answerNode.parentNode.insertBefore(answerNode, swapWith);
       }
+      //@ts-expect-error
       this.__updateAnswerIndices(answerIndex);
       //
     }
