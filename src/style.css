@@ -25,6 +25,7 @@ button {
   text-decoration: none;
   border: none;
   background-color: white;
+  color: rgb(92, 103, 118);
   cursor: pointer;
 }
 
@@ -114,12 +115,12 @@ i.fas {
 }
 
 .question:first-child button.question__body--up {
-  color: blanchedalmond;
+  color: rgb(191, 200, 213);
   pointer-events: none;
 }
 
 .question:last-child button.question__body--down {
-  color: blanchedalmond;
+  color: rgb(191, 200, 213);
   pointer-events: none;
 }
 
