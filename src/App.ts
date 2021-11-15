@@ -303,7 +303,7 @@ export class App {
           newAnswerNode.setAttribute(
             "data-answer-index",
             //@ts-expect-error
-            this.survey[questionIndex].answers.length.toString()
+            (this.survey[questionIndex].answers.length - 1).toString()
           );
           //@ts-expect-error
           newAnswerNode.querySelector(".answer__header--index").innerHTML =
